@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
+// import React, { useState } from 'react';
+import { writeText as writeClipboard, readText as readClipboard} from "@tauri-apps/plugin-clipboard-manager";
 import {
     Button, Alert, Chip,
     Dialog, DialogContent, DialogActions, DialogTitle, TextField,
@@ -108,9 +110,26 @@ export default function SettingWindow(props: Props) {
         setMode(newMode);
     }
 
+    async function getPasteContent() {
+        // const text = await navigator.clipboard.readText();
+        let text = '';
+        try {
+            text = await readClipboard();
+        } catch (error) {
+            console.error(error);
+            text = '';
+        }
+        return text;
+    }
+
+    const pasteAPIKey = async () => {
+        const pasteContent = await getPasteContent();
+        setSettingsEdit({ ...settingsEdit, openaiKey: pasteContent.trim() });
+    }
+
     // @ts-ignore
     // @ts-ignore
-    const [isFocused, setIsFocused] = useState(false);
+    // const [isFocused, setIsFocused] = useState(false);
     return (
         <Dialog open={props.open} onClose={onCancel} fullWidth >
             <DialogTitle>{t('settings')}</DialogTitle>
@@ -119,15 +138,16 @@ export default function SettingWindow(props: Props) {
                     autoFocus
                     margin="dense"
                     label={t('openai api key')}
-                    // type="password"
-                    type={isFocused ? "text" : "password"}
+                    type="password"
+                    // type={isFocused ? "text" : "password"}
                     fullWidth
                     variant="outlined"
                     value={settingsEdit.openaiKey}
                     onChange={(e) => setSettingsEdit({ ...settingsEdit, openaiKey: e.target.value.trim() })}
-                    onFocus={() => setIsFocused(true)}
-                    onBlur={() => setIsFocused(false)}
+                    // onFocus={() => setIsFocused(true)}
+                    // onBlur={() => setIsFocused(false)}
                 />
+                <Button onClick={pasteAPIKey}>{t('paste_api_key')}</Button>
                 <FormControl fullWidth variant="outlined" margin="dense">
                     <InputLabel htmlFor="language-select">{t('language')}</InputLabel>
                     <Select

@@ -54,6 +54,7 @@
     "@mui/material": "^5.11.11",
     "@tauri-apps/api": "2.0.0-alpha.5",
     "@tauri-apps/cli": "2.0.0-alpha.10",
+    "@tauri-apps/plugin-clipboard-manager": "github:tauri-apps/tauri-plugin-clipboard-manager#v2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",

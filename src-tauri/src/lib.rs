@@ -29,6 +29,7 @@ impl AppBuilder {
   pub fn run(self) {
     let setup = self.setup;
     tauri::Builder::default()
+      .plugin(tauri_plugin_clipboard_manager::init())
       .setup(move |app| {
         if let Some(setup) = setup {
           (setup)(app)?;
