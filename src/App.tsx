@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, MutableRefObject } from 'react';
+import { writeText as writeClipboard, readText as readClipboard} from "@tauri-apps/plugin-clipboard-manager";
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import Block from './Block'
 import * as client from './client'
@@ -216,7 +217,16 @@ function Main() {
 
         // do copy
         // * thats lines copy from copy block content action
-        navigator.clipboard.writeText(content);
+        async function copyToClipboard() {
+            try {
+                await writeClipboard(content);
+                store.addToast(t('copied to clipboard'));
+            } catch (error) {
+                console.error('Failed to copy text to clipboard: ', error);
+            }
+        }
+    
+        copyToClipboard();
         store.addToast(t('copied to clipboard'));
     });
 
@@ -604,7 +614,16 @@ function Main() {
                                             }
                                         }}
                                         copyMsg={() => {
-                                            navigator.clipboard.writeText(msg.content)
+                                            async function copyToClipboard() {
+                                                try {
+                                                    await writeClipboard(msg.content);
+                                                    store.addToast(t('copied to clipboard'));
+                                                } catch (error) {
+                                                    console.error('Failed to copy text to clipboard: ', error);
+                                                }
+                                            }
+                                        
+                                            copyToClipboard();
                                             store.addToast(t('copied to clipboard'))
                                         }}
                                         quoteMsg={() => {

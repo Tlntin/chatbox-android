@@ -111,7 +111,6 @@ export default function SettingWindow(props: Props) {
     }
 
     async function getPasteContent() {
-        // const text = await navigator.clipboard.readText();
         let text = '';
         try {
             text = await readClipboard();
