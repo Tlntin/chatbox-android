@@ -1,6 +1,6 @@
 [package]
 name = "chatbox"
-version = "0.0.0"
+version = "0.5.6"
 description = "A Tauri App"
 authors = ["Bin-Huang", "Tlntin"]
 license = "MIT"
