@@ -116,7 +116,7 @@ At first, I didn't know that it would be so popular. I listened to the feedback 
 - [x] Built-in AI services out of the box
 - [ ] Talk with files
 - [ ] Talk with URLs
-- [ ] Mobile(Android, iOS)
+- [x] Mobile(Android, iOS)
 - [ ] Cross-device synchronization
 - [ ] threads(like Slack)
 - More...

@@ -132,3 +132,4 @@ yarn-error.log*
 next-env.d.ts
 
 tmp
+src-tauri/gen/android/key.properties

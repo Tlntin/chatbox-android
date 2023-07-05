@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, MutableRefObject } from 'react';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import Block from './Block'
 import * as client from './client'
 import SessionItem from './SessionItem'
@@ -23,8 +24,8 @@ import AboutWindow from './AboutWindow';
 import { ThemeSwitcherProvider } from './theme/ThemeSwitcher';
 import { useTranslation } from "react-i18next";
 import icon from './icon.png'
-import { save } from '@tauri-apps/api/dialog';
-import { writeTextFile } from '@tauri-apps/api/fs';
+// import { save } from '@tauri-apps/api/dialog';
+// import { writeTextFile } from '@tauri-apps/api/fs';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import SponsorChip from './SponsorChip'
@@ -50,6 +51,7 @@ import {
 } from '@dnd-kit/sortable';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { SortableItem } from './SortableItem';
+import { writeFile } from 'fs';
 
 function Main() {
     const { t } = useTranslation()
@@ -254,18 +256,33 @@ function Main() {
         )
     }
     const saveSession = async (session: Session) => {
-        const filePath = await save({
-            filters: [{
-                name: 'Export',
-                extensions: ['md']
-            }]
-        });
-        if (filePath) {
-            const content = session.messages
-                .map(msg => `**${msg.role}**:\n${msg.content}`)
-                .join('\n\n--------------------\n\n')
-            await writeTextFile(filePath!!, content)
-        }
+        // const filePath = await save({
+        //     filters: [{
+        //         name: 'Export',
+        //         extensions: ['md']
+        //     }]
+        // });
+        // const filePath = await Filesystem.writeFile({
+        //     path: 'Export.md',
+        //     data: "",
+        //     directory: Directory.External,
+        //     encoding: Encoding.UTF8,
+        //   });
+        // if (filePath) {
+        //     const content = session.messages
+        //         .map(msg => `**${msg.role}**:\n${msg.content}`)
+        //         .join('\n\n--------------------\n\n')
+        //     // await writeTextFile(filePath!!, content)
+        //     await Filesystem.writeFile({
+        //         path: 'Export.md',
+        //         data: content,
+        //         directory: Directory.External,
+        //         encoding: Encoding.UTF8,
+        //       });
+        //     console.log('saved message ok', Directory.External.toString())
+        // } else {
+        //     console.log('saved message failed')
+        // }
     }
 
     const generate = async (session: Session, promptMsgs: Message[], targetMsg: Message) => {

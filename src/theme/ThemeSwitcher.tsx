@@ -77,7 +77,7 @@ export function ThemeSwitcherProvider(props: ThemeSwitcherProviderProps) {
         handleModeChange();
         const disposePromise =  api.onSystemThemeChange(handleModeChange);
         return () => {
-            disposePromise.then((dispose) => dispose());
+            // disposePromise.then((dispose) => dispose());
         }
     }, [mode]);
 

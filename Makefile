@@ -1,4 +1,4 @@
-VERSION ?= 0.1.0
+VERSION ?= 0.5.6
 
 change-version:
 	sed -i -e "s/\"version\": \".*\"/\"version\": \"$(VERSION)\"/" src-tauri/tauri.conf.json

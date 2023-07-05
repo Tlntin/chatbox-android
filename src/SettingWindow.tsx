@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Button, Alert, Chip,
     Dialog, DialogContent, DialogActions, DialogTitle, TextField,
@@ -110,6 +110,7 @@ export default function SettingWindow(props: Props) {
 
     // @ts-ignore
     // @ts-ignore
+    const [isFocused, setIsFocused] = useState(false);
     return (
         <Dialog open={props.open} onClose={onCancel} fullWidth >
             <DialogTitle>{t('settings')}</DialogTitle>
@@ -118,11 +119,14 @@ export default function SettingWindow(props: Props) {
                     autoFocus
                     margin="dense"
                     label={t('openai api key')}
-                    type="password"
+                    // type="password"
+                    type={isFocused ? "text" : "password"}
                     fullWidth
                     variant="outlined"
                     value={settingsEdit.openaiKey}
                     onChange={(e) => setSettingsEdit({ ...settingsEdit, openaiKey: e.target.value.trim() })}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
                 />
                 <FormControl fullWidth variant="outlined" margin="dense">
                     <InputLabel htmlFor="language-select">{t('language')}</InputLabel>
