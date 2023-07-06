@@ -19,7 +19,9 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import * as prompts from './prompts';
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import Save from '@mui/icons-material/Save'
+import ContentCutIcon from '@mui/icons-material/ContentCut';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+import ClearIcon from '@mui/icons-material/Clear';
 import CleanWidnow from './CleanWindow';
 import AboutWindow from './AboutWindow';
 import { ThemeSwitcherProvider } from './theme/ThemeSwitcher';
@@ -783,12 +785,30 @@ function MessageInput(props: {
         } 
     };
 
+    const clipToClipboard = async () => {
+        try {
+            if (messageInput.length > 0) {
+                await writeClipboard(messageInput)
+                setMessageInput("");
+            } else {
+                console.log("no content to clip");
+            }
+            
+        } catch (err) {
+            console.error('Failed to cut text: ', err);
+        } 
+    };
+
+    const clearInputMessage = async () => {
+        setMessageInput("");
+    }
+
     const handleInputChange = (event: any) => {
         setMessageInput(event.target.value);
         setShowPaste(true);
     }
 
-    const delay_clear_paste = () => {
+    const delay_clear_paste_on_blur = () => {
         // Clear the previous timeout if it exists
         if (timeoutId.current) {
             clearTimeout(timeoutId.current);
@@ -796,7 +816,15 @@ function MessageInput(props: {
         // Set a new timeout to hide the paste button
         timeoutId.current = setTimeout(() => {
           setShowPaste(false);
-        }, 1000); // Hide after 1 seconds
+        }, 2000); // Hide after 1.5 seconds
+    }
+
+    const delay_clear_paste_on_focus = () => {
+        // Clear the previous timeout if it exists
+        if (timeoutId.current) {
+            clearTimeout(timeoutId.current);
+        }
+        setShowPaste(true);
     }
     return (
         <form  onSubmit={(e) => {
@@ -816,8 +844,8 @@ function MessageInput(props: {
                             value={messageInput}
                             // onChange={(event) => setMessageInput(event.target.value)}
                             onChange={handleInputChange}
-                            onBlur={delay_clear_paste}
-                            onFocus={() => setShowPaste(true)}
+                            onBlur={delay_clear_paste_on_blur}
+                            onFocus={delay_clear_paste_on_focus}
                             fullWidth
                             maxRows={12}
                             autoFocus
@@ -838,7 +866,21 @@ function MessageInput(props: {
                         {showPaste && (
                         <Box sx={{
                             position: 'absolute', // This makes the PasteBlock positioned absolutely
-                            left: 0,
+                            left: 10,
+                            bottom: '100%', // This puts the PasteBlock above the bottom edge of the TextField
+                        }}>
+                            <Button
+                              onClick={clipToClipboard}
+                              startIcon={< ContentCutIcon/>}
+                            >
+                              {t("cut")}
+                            </Button>
+                        </Box>
+                        )}
+                        {showPaste && (
+                        <Box sx={{
+                            position: 'absolute', // This makes the PasteBlock positioned absolutely
+                            left: 80,
                             bottom: '100%', // This puts the PasteBlock above the bottom edge of the TextField
                         }}>
                             <Button
@@ -846,6 +888,20 @@ function MessageInput(props: {
                               startIcon={< ContentPasteIcon/>}
                             >
                               {t("paste")}
+                            </Button>
+                        </Box>
+                        )}
+                        {showPaste && (
+                        <Box sx={{
+                            position: 'absolute', // This makes the PasteBlock positioned absolutely
+                            left: 160,
+                            bottom: '100%', // This puts the PasteBlock above the bottom edge of the TextField
+                        }}>
+                            <Button
+                              onClick={clearInputMessage}
+                              startIcon={< ClearIcon/>}
+                            >
+                              {t("clear")}
                             </Button>
                         </Box>
                         )}
