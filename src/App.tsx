@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState, MutableRefObject } from 'react';
 import { writeText as writeClipboard, readText as readClipboard} from "@tauri-apps/plugin-clipboard-manager";
-import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import Block from './Block'
 import * as client from './client'
 import SessionItem from './SessionItem'
@@ -20,6 +19,7 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import * as prompts from './prompts';
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import Save from '@mui/icons-material/Save'
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import CleanWidnow from './CleanWindow';
 import AboutWindow from './AboutWindow';
 import { ThemeSwitcherProvider } from './theme/ThemeSwitcher';
@@ -52,7 +52,7 @@ import {
 } from '@dnd-kit/sortable';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { SortableItem } from './SortableItem';
-import { writeFile } from 'fs';
+
 
 function Main() {
     const { t } = useTranslation()
@@ -73,7 +73,7 @@ function Main() {
             coordinateGetter: sortableKeyboardCoordinates,
         })
     );
-
+    
     const sortedSessions = sortSessions(store.chatSessions)
     function handleDragEnd(event: DragEndEvent) {
         const { active, over } = event;
@@ -743,6 +743,9 @@ function MessageInput(props: {
     setQuotaCache(cache: string): void
     textareaRef: MutableRefObject<HTMLTextAreaElement | null>
 }) {
+    const [showPaste, setShowPaste] = useState(false);
+    const textAreaRef = useRef(null);
+    let timeoutId = useRef<any>(null);
     const { t } = useTranslation()
     const [messageInput, setMessageInput] = useState('')
     useEffect(() => {
@@ -771,20 +774,50 @@ function MessageInput(props: {
         }
     }, [])
 
+    const pasteFromClipboard = async () => {
+        try {
+            const text = await readClipboard(); // 使用 Web API 的 navigator.clipboard
+            setMessageInput(text);
+        } catch {
+
+        } 
+    };
+
+    const handleInputChange = (event: any) => {
+        setMessageInput(event.target.value);
+        setShowPaste(true);
+    }
+
+    const delay_clear_paste = () => {
+        // Clear the previous timeout if it exists
+        if (timeoutId.current) {
+            clearTimeout(timeoutId.current);
+        }
+        // Set a new timeout to hide the paste button
+        timeoutId.current = setTimeout(() => {
+          setShowPaste(false);
+        }, 1000); // Hide after 1 seconds
+    }
     return (
         <form  onSubmit={(e) => {
             e.preventDefault()
             submit()
-        }}>
+        }} style={{ position: 'relative' }}>
             <Stack direction="column" spacing={1} >
                 <Grid container spacing={1}>
                     <Grid item xs>
+                    <Box sx={{
+                        position: 'relative', // This makes it so that the PasteBlock is positioned relative to this Box, not the entire document
+                    }}>
                         <TextField
                             inputRef={props.textareaRef}
                             multiline
                             label="Prompt"
                             value={messageInput}
-                            onChange={(event) => setMessageInput(event.target.value)}
+                            // onChange={(event) => setMessageInput(event.target.value)}
+                            onChange={handleInputChange}
+                            onBlur={delay_clear_paste}
+                            onFocus={() => setShowPaste(true)}
                             fullWidth
                             maxRows={12}
                             autoFocus
@@ -802,6 +835,21 @@ function MessageInput(props: {
                                 }
                             }}
                         />
+                        {showPaste && (
+                        <Box sx={{
+                            position: 'absolute', // This makes the PasteBlock positioned absolutely
+                            left: 0,
+                            bottom: '100%', // This puts the PasteBlock above the bottom edge of the TextField
+                        }}>
+                            <Button
+                              onClick={pasteFromClipboard}
+                              startIcon={< ContentPasteIcon/>}
+                            >
+                              {t("paste")}
+                            </Button>
+                        </Box>
+                        )}
+                    </Box>
                     </Grid>
                     <Grid item xs='auto'>
                         <Button type='submit' variant="contained" size='large'
