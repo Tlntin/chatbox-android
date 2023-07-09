@@ -58,6 +58,12 @@
 
 *Chatbox supports all major operating systems, including: Windows, Mac (Intel, M1), and Linux.*
 
+## Demo video
+
+https://github.com/Tlntin/chatbox-android/assets/28218658/a78dfe31-e153-4d1e-8be2-f2457ffa2021
+
+
+
 ### Download from the official website
 
 Visit **[chatboxai.app](https://chatboxai.app/)** to download the latest version.
