@@ -59,6 +59,12 @@
 
 *Chatbox 支持所有的主流操作系统，包括： Windows、 Mac (Intel, M1) 和 Linux。*
 
+
+## Demo video
+
+https://github.com/Tlntin/chatbox-android/assets/28218658/a78dfe31-e153-4d1e-8be2-f2457ffa2021
+
+
 ### 从官方网站下载
 
 请访问 **[chatboxai.app](https://chatboxai.app/)** 下载最新版本。
@@ -117,10 +123,15 @@ paru -S chatbox-bin
 - [x] 内置 AI 服务，开箱即用
 - [ ] 可以发送文件，谈论文件
 - [ ] 可以发送链接，谈论网页
-- [ ] 移动端（iOS、Android）
+- [x] 移动端（iOS、Android）
 - [ ] 跨设备的会话同步
 - [ ] threads(就像 Slack 一样)
 - 更多...
+
+## 其他AI适配
+- [x] ChatGLM-6b
+- [x] ChatGLM2-6b
+- [x] TigerBot-7b-sft
 
 ## 如何贡献
 

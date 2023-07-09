@@ -251,7 +251,7 @@ function Main() {
     const generateName = async (session: Session) => {
         client.replay(
             store.settings.openaiKey,
-            store.settings.apiHost,
+            store.settings.apiUrl,
             store.settings.maxContextSize,
             store.settings.maxTokens,
             store.settings.model,
@@ -301,7 +301,7 @@ function Main() {
         messageScrollRef.current = { msgId: targetMsg.id, smooth: false }
         await client.replay(
             store.settings.openaiKey,
-            store.settings.apiHost,
+            store.settings.apiUrl,
             store.settings.maxContextSize,
             store.settings.maxTokens,
             store.settings.model,
@@ -746,7 +746,6 @@ function MessageInput(props: {
     textareaRef: MutableRefObject<HTMLTextAreaElement | null>
 }) {
     const [showPaste, setShowPaste] = useState(false);
-    const textAreaRef = useRef(null);
     let timeoutId = useRef<any>(null);
     const { t } = useTranslation()
     const [messageInput, setMessageInput] = useState('')

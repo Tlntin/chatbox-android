@@ -127,6 +127,12 @@ At first, I didn't know that it would be so popular. I listened to the feedback 
 - [ ] threads(like Slack)
 - More...
 
+
+## Other AI provider
+- [x] ChatGLM-6b
+- [x] ChatGLM2-6b
+- [x] TigerBot-7b-sft
+
 ## How to Contribute
 
 Any form of contribution is welcome, including but not limited to:

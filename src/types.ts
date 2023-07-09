@@ -38,8 +38,9 @@ export function createSession(name: string = "Untitled"): Session {
 }
 
 export interface Settings {
+    aiProvider: string
     openaiKey: string
-    apiHost: string
+    apiUrl: string
     model: string
     maxContextSize: string
     temperature: number

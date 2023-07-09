@@ -11,7 +11,7 @@ export interface OnTextCallbackResult {
 
 export async function replay(
     apiKey: string,
-    host: string,
+    url: string,
     maxContextSize: string,
     maxTokens: string,
     modelName: string,
@@ -58,7 +58,7 @@ export async function replay(
     let fullText = '';
     try {
         const messages = prompts.map(msg => ({ role: msg.role, content: msg.content }))
-        const response = await fetch(`${host}/v1/chat/completions`, {
+        const response = await fetch(`${url}`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${apiKey}`,

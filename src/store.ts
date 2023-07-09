@@ -1,3 +1,4 @@
+import aiProvidersData from './aiProviders.json';
 import { useState, useEffect, useRef } from 'react'
 import { Settings, createSession, Session, Message, Config } from './types'
 import * as defaults from './defaults'
@@ -9,10 +10,15 @@ import { useTranslation } from "react-i18next";
 
 // setting store
 
-export function getDefaultSettings(): Settings {
+export function getDefaultSettings(aiProvider: string = "ChatGPT"): Settings {
+    const aiProviders: any = aiProvidersData;
+    console.log("ai provider is ", aiProvider);
+    console.log("ai providers is ", aiProviders);
+    console.log("api url is ", aiProviders[aiProvider]);
     return {
+        aiProvider: aiProvider,
         openaiKey: '',
-        apiHost: 'https://api.openai.com',
+        apiUrl: aiProviders[aiProvider].url,
         model: "gpt-3.5-turbo",
         temperature: 0.7,
         maxContextSize: "4000",
@@ -38,10 +44,9 @@ export async function readSettings(): Promise<Settings> {
 }
 
 export async function writeSettings(settings: Settings) {
-    if (!settings.apiHost) {
-        settings.apiHost = getDefaultSettings().apiHost
+    if (!settings.apiUrl) {
+        settings.apiUrl = getDefaultSettings(settings.aiProvider).apiUrl
     }
-    console.log('writeSettings.apiHost', settings.apiHost)
     return api.writeStore('settings', settings)
 }
 
@@ -71,7 +76,7 @@ export async function readSessions(settings: Settings): Promise<Session[]> {
     return sessions.map((s: any) => {
         // 兼容旧版本的数据
         if (!s.model) {
-            s.model = getDefaultSettings().model
+            s.model = getDefaultSettings(settings.aiProvider).model
         }
         return s
     })
